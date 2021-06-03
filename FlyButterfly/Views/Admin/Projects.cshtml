@@ -1,0 +1,37 @@
+﻿@model ProjectsModel
+@{
+    ViewData["Title"] = "Проекты";
+}
+
+<form asp-action="DeleteProject" asp-controller="Admin" method="post">
+    <div class="text-center">
+        <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
+            <tr>
+                <th style="user-select:none;">
+                    Список проектов:
+                </th>
+            </tr>
+            @foreach (ProjectsModel pr in ViewBag.Projects)
+            {
+                <tr>
+                    <td style="user-select:none; text-align:left; min-width:600px">
+                        <button class="btnLesh" type="submit" name="id" value="@pr.ID">Удалить</button>
+
+                        @pr.Name
+                        <a class="nav-link text-dark" asp-controller="Admin" asp-action="Risks" asp-route-id="@pr.ID">Настроить</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</form>
+
+<form asp-action="Projects" asp-controller="Admin" method="post">
+    <div class="text-center" style="font-size:14px;">
+        <input style="min-height: 35px" asp-for="Name" placeholder="Новый проект..." />
+        <input type="date" asp-for="Start_Date" />
+        <input type="date" asp-for="End_Date" />
+        <button class="btnLesh" type="submit">Добавить</button>
+    </div>
+</form>

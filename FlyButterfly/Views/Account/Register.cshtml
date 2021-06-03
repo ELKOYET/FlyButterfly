@@ -1,0 +1,49 @@
+﻿@model RegisterModel
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+    <div class="text-center">
+        <div class="form-group">
+            <input autocomplete="off" placeholder="Логин.." type="text" asp-for="Login" />
+            <span asp-validation-for="Login" />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" placeholder="Пароль.." asp-for="Password" />
+            <span asp-validation-for="Password" />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" placeholder="Подтвердите Пароль.." asp-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword" />
+        </div>
+
+        @* =================================================================== *@
+
+        <div class="form-group">
+            <input autocomplete="off" placeholder="Фамилия.." asp-for="Surname" />
+            <span asp-validation-for="Surname" />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" placeholder="Имя.." asp-for="Name" />
+            <span asp-validation-for="Name" />
+        </div>
+        <div class="form-group">
+            
+            <select name="Profession_ID">
+                @foreach (ProfessionModel prof in ViewBag.Professions)
+                {
+                    <option value="@prof.ID">@prof.Name</option>
+                }
+
+            </select>          
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" value="Регистрация" class="custom-button" />
+        </div>
+
+    </div>
+</form>

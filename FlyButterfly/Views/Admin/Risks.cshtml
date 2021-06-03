@@ -1,0 +1,146 @@
+﻿@model RiskModel
+@{
+    ViewData["Title"] = "Профессии";
+}
+
+<div class="leftcol">
+    <form asp-action="DeleteProfession" asp-controller="Admin" method="post">
+        <div class="text-center">
+            <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
+                <tr>
+                    <th style="user-select:none;">
+                        Список рисков:
+                    </th>
+                </tr>
+                @foreach (RiskModel pr in ViewBag.Risks)
+                {
+                    <tr onclick="FillInputs(@pr.Name, @pr.Discription, @pr.Reaction,@pr.Influence, @pr.Chance, @pr.ID)">
+
+                        <td style="user-select:none; text-align:left; min-width:600px">
+                            <button type="submit" name="id" value="@pr.ID">Удалить</button>
+                            @pr.Name
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </form>
+</div>
+
+<div class="rightcol">
+    <form asp-action="Risks" asp-route-edit="@true" asp-controller="Admin" method="post">
+        <div class="text-center" style="font-size:14px;">
+            <input style="min-height: 35px" asp-for="Name" id="EditName" type="text" placeholder="Название риска..." />
+            @*   <textarea rows="4" style="min-height: 35px" id="EditDis" asp-for="Discription" type="text" placeholder="Описание..." />*@
+            <select asp-for="User" id="UserEdit">
+                <option value="@null" selected>Выберите ответственного</option>
+                @foreach (UserModel um in ViewBag.Users)
+                {
+                    <option value="@um">@um.Name</option>
+                }
+
+            </select>
+
+            <select asp-for="Chance" id="ChanceEdit">
+                <option value="@null" selected>Вероятность события</option>
+                @foreach (RiskChanceModel rm in ViewBag.Chances)
+                {
+                    <option value="@rm">@rm.ChanceValue</option>
+                }
+
+            </select>
+
+            <select asp-for="Reaction" id="ReacEdit">
+                <option value="@null" selected>Стратегия реагирования</option>
+                @foreach (RiskReaction rm in ViewBag.Reactions)
+                {
+                    <option value="@rm">@rm.ReactionName</option>
+                }
+
+            </select>
+
+            <select asp-for="Influence" id="InfEdit">
+                <option value="@null" selected>Влияние на проект</option>
+                @foreach (RiskInfluenceModel rm in ViewBag.Influences)
+                {
+                    <option value="@rm">@rm.InfluenceValue</option>
+                }
+
+            </select>
+
+            @Html.Hidden("ProjectId", (int)ViewBag.ProjectId);
+            @Html.HiddenFor(x => x.ID, new { @id = "riskid" });
+            <button type="submit">Сохранить изменения</button>
+        </div>
+    </form>
+
+
+    <form asp-action="Risks" asp-route-edit="@false" asp-controller="Admin" method="post">
+        <div class="text-center" style="font-size:14px;">
+            <input style="min-height: 35px" asp-for="Name" type="text" placeholder="Название риска..." />
+            @* <textarea rows="4" style="min-height: 35px" asp-for="Discription" type="text" placeholder="Описание..." />*@
+            <select asp-for="User">
+                <option value="@null" selected>Выберите ответственного</option>
+                @foreach (UserModel um in ViewBag.Users)
+                {
+                    <option value="@um">@um.Name</option>
+                }
+
+            </select>
+
+            <select asp-for="Chance">
+                <option value="@null" selected>Вероятность события</option>
+                @foreach (RiskChanceModel rm in ViewBag.Chances)
+                {
+                    <option value="@rm">@rm.ChanceValue</option>
+                }
+
+            </select>
+
+
+            <input style="min-height: 35px" asp-for="Name" type="text" placeholder="Название риска..." />
+
+            <select asp-for="Reaction">
+                <option value="@null" selected>Стратегия реагирования</option>
+                @foreach (RiskReaction rm in ViewBag.Reactions)
+                {
+                    <option value="@rm">@rm.ReactionName</option>
+                }
+
+            </select>
+
+            <select asp-for="Influence">
+                <option value="@null" selected>Влияние на проект</option>
+                @foreach (RiskInfluenceModel rm in ViewBag.Influences)
+                {
+                    <option value="@rm">@rm.InfluenceValue</option>
+                }
+
+            </select>
+
+
+            <button type="submit">Добавить риск к проекту</button>
+        </div>
+    </form>
+
+</div>
+<script>
+    let Name = document.getElementById('EditName')
+    let Dis = document.getElementById('EditDis')
+    let Reac = document.getElementById('ReacEdit')
+    let Inf = document.getElementById('InfEdit')
+    let Chance = document.getElementById('ChanceEdit')
+    let RiskId = document.getElementById('riskid')
+
+    function FillInputs(_Name, _Dis, _Reac, _Inf, _Chance, _riskid) {
+        Name.textContent = _Name
+        Dis.textContent = _Dis
+        Reac.value = _Reac
+        Inf.value = _Inf
+        Chance.value = _Chance
+        RiskId.value = _riskid
+    }
+
+</script>
+
+

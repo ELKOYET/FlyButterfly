@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlyButterfly", "FlyButterfly\FlyButterfly.csproj", "{DB14EB93-9703-490D-888E-6D41C5765432}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB14EB93-9703-490D-888E-6D41C5765432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB14EB93-9703-490D-888E-6D41C5765432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB14EB93-9703-490D-888E-6D41C5765432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB14EB93-9703-490D-888E-6D41C5765432}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78198B32-EA46-4697-9EA1-382ADC788438}
+	EndGlobalSection
+EndGlobal
