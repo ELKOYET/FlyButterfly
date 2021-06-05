@@ -9,7 +9,6 @@ namespace FlyButterfly.Models
 {
     public class UserModel
     {
-        [Key, Column(Order = 1)]
         public int ID { get; set; }
 
         public string Name { get; set; }

@@ -1,145 +1,164 @@
 ﻿@model RiskModel
 @{
-    ViewData["Title"] = "Профессии";
+    ViewData["Title"] = "Риски проекта";
 }
-
-<div class="leftcol">
-    <form asp-action="DeleteProfession" asp-controller="Admin" method="post">
-        <div class="text-center">
-            <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
-                <tr>
-                    <th style="user-select:none;">
-                        Список рисков:
-                    </th>
-                </tr>
-                @foreach (RiskModel pr in ViewBag.Risks)
-                {
-                    <tr onclick="FillInputs(@pr.Name, @pr.Discription, @pr.Reaction,@pr.Influence, @pr.Chance, @pr.ID)">
-
-                        <td style="user-select:none; text-align:left; min-width:600px">
-                            <button type="submit" name="id" value="@pr.ID">Удалить</button>
-                            @pr.Name
-                        </td>
+<div style="transform:translate(8%,0)">
+    <div class="leftcol" style="background:rgb(219 95 95); min-height:500px; margin-right:25px">
+        <form asp-action="DeleteRisk" asp-controller="Admin" method="post">
+            <div class="text-left">
+                <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
+                    <tr>
+                        <th style="user-select:none;"></th>
+                        <th style="user-select:none;">Имя</th>
+                        <th style="user-select:none;">Ранг</th>
                     </tr>
-                }
-            </table>
+                    @foreach (RiskModel pr in ViewBag.Risks)
+                    {
+                        <tr class="RisksTableRow" onclick="Switch('editLabel'); Enable('EditPanel'); FillInputs('@(pr.ID)', '@(pr.Name)', '@(pr.Discription)', '@(pr.User.ID)', '@(pr.Reaction.ID)', '@(pr.Influence.ID)', '@(pr.Chance.ID)');">
+
+                            <td style="user-select:none;">
+                                <button type="submit" name="id" value="@pr.ID">Удалить</button>
+                            </td>
+
+                            <td style="user-select:none; min-width:300px">
+                                @pr.Name
+                            </td>
+
+                            <td style="user-select:none; min-width:30px">
+                                @(pr.Influence.ID*pr.Chance.ID)
+                            </td>
+
+                        </tr>
+                    }
+                </table>
+            </div>
+        </form>
+    </div>
+
+
+    <div style="background: rgb(128 189 77); min-height:500px; margin-left:25px" class="rightcol">
+
+        <div style="width:100%; display:table-cell; width:50%;">
+            <div style="">
+                <label id="addLabel" style="user-select:none; background:black; color:white; min-width:49%; margin:2px 0 2px 0" for="add"><input hidden id="add" type="radio" onclick="Enable('AddPanel'); Switch('addLabel')">Добавление</label>
+                <label id="editLabel" style="user-select:none; background: white; color: black; min-width: 49%; margin: 2px 0 2px 0" for="edit"><input hidden id="edit" type="radio" onclick="Enable('EditPanel'); Switch('editLabel')">Редактирование</label>
+            </div>
+
+            <form name="Panel" id="AddPanel" asp-action="Risks" asp-controller="Admin" method="post">
+                <div style="font-size:14px;">
+
+                    <p>Название риска</p>
+                    <input style="min-height: 35px; width:60%" asp-for="Name" type="text" placeholder="Название риска..." />
+
+                    <p>Описание</p>
+                    <textarea rows="4" style="min-height: 35px;  width:60%" asp-for="Discription" type="text" placeholder="Описание..."></textarea>
+
+                    <div class="text-left">
+                        <p>Ответственный</p>
+                        @Html.DropDownList("UserId", ViewBag.Users as SelectList, "Ответственный")
+
+                        <p>Вероятность</p>
+                        @Html.DropDownList("ChanceId", ViewBag.Chances as SelectList, "Вероятность события")
+
+                        <p>Стратегия реагирования</p>
+                        @Html.DropDownList("ReactionId", ViewBag.Reactions as SelectList, "Стратегия реагирования")
+
+                        <p>Влияние на проект</p>
+                        @Html.DropDownList("InfluenceId", ViewBag.Influences as SelectList, "Влияние на проект")
+                    </div>
+
+                    <button type="submit" asp-route-edit="@false" asp-route-projectId="@ViewBag.projectId">Добавить риск к проекту</button>
+                </div>
+            </form>
+
+            <form hidden="hidden" name="Panel" id="EditPanel" asp-action="Risks" asp-controller="Admin" method="post">
+                <div style="font-size:14px;">
+
+                    <div class="text-left">
+
+                        <p>Название риска</p>
+                        <input style="min-height: 35px; width:60%" asp-for="Name" id="EditName" type="text" placeholder="Название риска..." />
+
+                        <p>Описание</p>
+                        <textarea rows="4" style="min-height: 35px;  width:60%" id="EditDis" asp-for="Discription" type="text" placeholder="Описание..."></textarea>
+
+                        <div class="text-left">
+                            <p>Ответственный</p>
+                            @Html.DropDownList("UserId", ViewBag.Users as SelectList, "Ответственный", new { @id = "EditUser" })
+
+                            <p>Вероятность</p>
+                            @Html.DropDownList("ChanceId", ViewBag.Chances as SelectList, "Вероятность события", new { @id = "EditChance" })
+
+                            <p>Стратегия реагирования</p>
+                            @Html.DropDownList("ReactionId", ViewBag.Reactions as SelectList, "Стратегия реагирования", new { @id = "EditReaction" })
+
+                            <p>Влияние на проект</p>
+                            @Html.DropDownList("InfluenceId", ViewBag.Influences as SelectList, "Влияние на проект", new { @id = "EditInfluence" })
+                        </div>
+
+                        @Html.HiddenFor(x => x.ID, new { @id = "riskid" })
+
+                        <button type="submit" asp-route-edit="@true" asp-route-projectId="@ViewBag.projectId">Сохранить изменения</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
-    </form>
-</div>
-
-<div class="rightcol">
-    <form asp-action="Risks" asp-route-edit="@true" asp-controller="Admin" method="post">
-        <div class="text-center" style="font-size:14px;">
-            <input style="min-height: 35px" asp-for="Name" id="EditName" type="text" placeholder="Название риска..." />
-            @*   <textarea rows="4" style="min-height: 35px" id="EditDis" asp-for="Discription" type="text" placeholder="Описание..." />*@
-            <select asp-for="User" id="UserEdit">
-                <option value="@null" selected>Выберите ответственного</option>
-                @foreach (UserModel um in ViewBag.Users)
-                {
-                    <option value="@um">@um.Name</option>
-                }
-
-            </select>
-
-            <select asp-for="Chance" id="ChanceEdit">
-                <option value="@null" selected>Вероятность события</option>
-                @foreach (RiskChanceModel rm in ViewBag.Chances)
-                {
-                    <option value="@rm">@rm.ChanceValue</option>
-                }
-
-            </select>
-
-            <select asp-for="Reaction" id="ReacEdit">
-                <option value="@null" selected>Стратегия реагирования</option>
-                @foreach (RiskReaction rm in ViewBag.Reactions)
-                {
-                    <option value="@rm">@rm.ReactionName</option>
-                }
-
-            </select>
-
-            <select asp-for="Influence" id="InfEdit">
-                <option value="@null" selected>Влияние на проект</option>
-                @foreach (RiskInfluenceModel rm in ViewBag.Influences)
-                {
-                    <option value="@rm">@rm.InfluenceValue</option>
-                }
-
-            </select>
-
-            @Html.Hidden("ProjectId", (int)ViewBag.ProjectId);
-            @Html.HiddenFor(x => x.ID, new { @id = "riskid" });
-            <button type="submit">Сохранить изменения</button>
-        </div>
-    </form>
-
-
-    <form asp-action="Risks" asp-route-edit="@false" asp-controller="Admin" method="post">
-        <div class="text-center" style="font-size:14px;">
-            <input style="min-height: 35px" asp-for="Name" type="text" placeholder="Название риска..." />
-            @* <textarea rows="4" style="min-height: 35px" asp-for="Discription" type="text" placeholder="Описание..." />*@
-            <select asp-for="User">
-                <option value="@null" selected>Выберите ответственного</option>
-                @foreach (UserModel um in ViewBag.Users)
-                {
-                    <option value="@um">@um.Name</option>
-                }
-
-            </select>
-
-            <select asp-for="Chance">
-                <option value="@null" selected>Вероятность события</option>
-                @foreach (RiskChanceModel rm in ViewBag.Chances)
-                {
-                    <option value="@rm">@rm.ChanceValue</option>
-                }
-
-            </select>
-
-
-            <input style="min-height: 35px" asp-for="Name" type="text" placeholder="Название риска..." />
-
-            <select asp-for="Reaction">
-                <option value="@null" selected>Стратегия реагирования</option>
-                @foreach (RiskReaction rm in ViewBag.Reactions)
-                {
-                    <option value="@rm">@rm.ReactionName</option>
-                }
-
-            </select>
-
-            <select asp-for="Influence">
-                <option value="@null" selected>Влияние на проект</option>
-                @foreach (RiskInfluenceModel rm in ViewBag.Influences)
-                {
-                    <option value="@rm">@rm.InfluenceValue</option>
-                }
-
-            </select>
-
-
-            <button type="submit">Добавить риск к проекту</button>
-        </div>
-    </form>
-
+    </div>
 </div>
 <script>
-    let Name = document.getElementById('EditName')
-    let Dis = document.getElementById('EditDis')
-    let Reac = document.getElementById('ReacEdit')
-    let Inf = document.getElementById('InfEdit')
-    let Chance = document.getElementById('ChanceEdit')
-    let RiskId = document.getElementById('riskid')
 
-    function FillInputs(_Name, _Dis, _Reac, _Inf, _Chance, _riskid) {
-        Name.textContent = _Name
-        Dis.textContent = _Dis
-        Reac.value = _Reac
-        Inf.value = _Inf
-        Chance.value = _Chance
-        RiskId.value = _riskid
+    let Name = document.getElementById('EditName');
+    let Dis = document.getElementById('EditDis');
+
+    let ReacId = document.getElementById('EditReaction');
+    let InfId = document.getElementById('EditInfluence');
+    let ChanceId = document.getElementById('EditChance');
+    let UsrId = document.getElementById('EditUser');
+
+
+    let RiskId = document.getElementById('riskid');
+
+    let Panels = document.getElementsByName("Panel");
+
+    let editBtn = document.getElementById('editLabel');
+    let addBtn = document.getElementById('addLabel');
+
+    function FillInputs(_riskid, _Name, _Dis, _UserId, _ReacId, _InfId, _ChanceId) {
+        RiskId.value = _riskid;
+
+        Name.value = _Name;
+        Dis.value = _Dis;
+
+        UsrId.value = _UserId;
+        ReacId.value = _ReacId;
+        InfId.value = _InfId;
+        ChanceId.value = _ChanceId;
     }
+
+    function Enable(id) {
+
+        for (let i = 0; i < Panels.length; i++) {
+            Panels[i].hidden = true;
+        }
+
+        document.getElementById(id).hidden = false;
+    }
+
+    function Switch(id) {
+
+        editBtn.style.background = 'White';
+        editBtn.style.color = 'Black';
+
+        addBtn.style.background = 'White';
+        addBtn.style.color = 'Black';
+
+        document.getElementById(id).style.background = 'Black'
+        document.getElementById(id).style.color = 'White'
+
+    }
+
+
 
 </script>
 
