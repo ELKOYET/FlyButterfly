@@ -142,27 +142,52 @@ namespace FlyButterfly.Controllers
                 return NotFound();
 
             ViewBag.projectId = projectId;
-            ViewBag.Influences = new SelectList(_context.RiskInfluences.ToArray(), "ID", "InfluenceValue");
-            ViewBag.Reactions = new SelectList(_context.RiskReactions.ToArray(), "ID", "ReactionName");
-            ViewBag.Chances = new SelectList(_context.RiskChances.ToArray(), "ID", "ChanceValue");
+            ViewBag.Influences = new SelectList(_context.RiskInfluences.ToArray(), "ID", "Name");
+            ViewBag.Reactions = new SelectList(_context.RiskReactions.ToArray(), "ID", "Name");
+            ViewBag.Chances = new SelectList(_context.RiskChances.ToArray(), "ID", "Name");
             ViewBag.Users = new SelectList(_context.Users.ToArray(), "ID", "Name");
+            ViewBag.Types = new SelectList(_context.RiskTypes.ToArray(), "ID", "Name");
 
-            ViewBag.Risks = _context.RiskModels.ToArray();
+            ViewBag.Risks = _context.RiskModels.Where(x => x.Project.ID == projectId).ToArray();
 
             return View();
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Risks(RiskModel risk, bool edit, int projectId, int UserId, int InfluenceId, int ReactionId, int ChanceId)
+        public async Task<IActionResult> Risks(RiskModel risk, bool edit, int projectId, int UserId,
+            int InfluenceId, int ReactionId, int ChanceId, int TypeId)
         {
+            var _Name = risk.Name;
+            var _User = await _context.Users.FindAsync(UserId);
+            var _Influence = await _context.RiskInfluences.FindAsync(InfluenceId);
+            var _Reaction = await _context.RiskReactions.FindAsync(ReactionId);
+            var _Chance = await _context.RiskChances.FindAsync(ChanceId);
+            var _Type = await _context.RiskTypes.FindAsync(TypeId);
+            var _Discription = risk.Discription;
+
+            bool valid = !(_User == null || _Influence == null || _Reaction == null || _Chance == null || _Type == null || string.IsNullOrEmpty(_Discription) || string.IsNullOrEmpty(_Name));
+
+
             ProjectsModel pr = await _context.Projects.FindAsync(projectId);
 
             if (ModelState.IsValid)
             {
                 if (pr != null)
                 {
+                    if (!valid)
+                    {
+                        ViewBag.projectId = projectId;
+                        ViewBag.Influences = new SelectList(_context.RiskInfluences.ToArray(), "ID", "Name");
+                        ViewBag.Reactions = new SelectList(_context.RiskReactions.ToArray(), "ID", "Name");
+                        ViewBag.Chances = new SelectList(_context.RiskChances.ToArray(), "ID", "Name");
+                        ViewBag.Users = new SelectList(_context.Users.ToArray(), "ID", "Name");
+                        ViewBag.Types = new SelectList(_context.RiskTypes.ToArray(), "ID", "Name");
 
+                        ViewBag.Risks = _context.RiskModels.Where(x => x.Project.ID == projectId).ToArray();
+                        ModelState.AddModelError("", "Не все необходимые поля заполнены");
+                        return View();
+                    }
                     if (edit)
                     {
                         var rs = pr.Risks.FirstOrDefault(x => x.ID == risk.ID);
@@ -171,11 +196,12 @@ namespace FlyButterfly.Controllers
                         rs.Influence = await _context.RiskInfluences.FindAsync(InfluenceId);
                         rs.Reaction = await _context.RiskReactions.FindAsync(ReactionId);
                         rs.Chance = await _context.RiskChances.FindAsync(ChanceId);
+                        rs.Type = await _context.RiskTypes.FindAsync(TypeId);
                         rs.Discription = risk.Discription;
                     }
                     else
                     {
-                        var r = _context.RiskModels.FirstOrDefault(x => x.Name == risk.Name);
+                        var r = _context.RiskModels.FirstOrDefault(x => x.Project.ID==projectId && x.Name == risk.Name);
                         if (r == null)
                         {
                             var Rsk = new RiskModel()
@@ -186,9 +212,10 @@ namespace FlyButterfly.Controllers
                                 Influence = await _context.RiskInfluences.FindAsync(InfluenceId),
                                 Reaction = await _context.RiskReactions.FindAsync(ReactionId),
                                 Chance = await _context.RiskChances.FindAsync(ChanceId),
+                                Type = await _context.RiskTypes.FindAsync(TypeId),
                                 Project = pr
                             };
-                            _context.RiskModels.Add(Rsk);
+                            pr.Risks.Add(Rsk);
                         }
                         else
                         {
@@ -207,12 +234,13 @@ namespace FlyButterfly.Controllers
             }
 
             ViewBag.projectId = projectId;
-            ViewBag.Influences = new SelectList(_context.RiskInfluences.ToArray(), "ID", "InfluenceValue");
-            ViewBag.Reactions = new SelectList(_context.RiskReactions.ToArray(), "ID", "ReactionName");
-            ViewBag.Chances = new SelectList(_context.RiskChances.ToArray(), "ID", "ChanceValue");
+            ViewBag.Influences = new SelectList(_context.RiskInfluences.ToArray(), "ID", "Name");
+            ViewBag.Reactions = new SelectList(_context.RiskReactions.ToArray(), "ID", "Name");
+            ViewBag.Chances = new SelectList(_context.RiskChances.ToArray(), "ID", "Name");
             ViewBag.Users = new SelectList(_context.Users.ToArray(), "ID", "Name");
+            ViewBag.Types = new SelectList(_context.RiskTypes.ToArray(), "ID", "Name");
 
-            ViewBag.Risks = _context.RiskModels.ToArray();
+            ViewBag.Risks = _context.RiskModels.Where(x => x.Project.ID == projectId).ToArray();
 
             return View();
         }

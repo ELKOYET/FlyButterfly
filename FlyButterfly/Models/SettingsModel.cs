@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace FlyButterfly.Models
 {
-    public class RiskInfluenceModel
+    public class SettingsModel
     {
-        public int ID { get; set; }
-        public string InfluenceValue { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
 
     }
 }

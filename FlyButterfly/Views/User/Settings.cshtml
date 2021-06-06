@@ -1,0 +1,23 @@
+﻿@model SettingsModel
+@{
+    ViewData["Title"] = "Настройки";
+}
+
+
+<form asp-action="Settings" asp-controller="User" method="post">
+
+    <div class="form-group text-left" style="margin-left:1px; padding-bottom:15px; padding-top: 15px">
+
+        <label>Имя <input autocomplete="off" asp-for="Name" type="text" placeholder="Имя..." /></label>
+        <label>Фамилия <input autocomplete="off" asp-for="Surname" type="text" placeholder="Фамилия..." /></label>
+
+        <label>Профессия @Html.DropDownList("ProfessionId", ViewBag.Professions as SelectList, "Профессия")</label>
+
+        <button type="submit">Подтвердить</button>
+
+    </div>
+
+
+</form>
+
+

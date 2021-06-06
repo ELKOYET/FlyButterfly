@@ -4,21 +4,38 @@
 }
 
 <form asp-action="DeleteProject" asp-controller="Admin" method="post">
-    <div class="text-center">
+    <div>
         <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
             <tr>
                 <th style="user-select:none;">
-                    Список проектов:
+                </th>
+                <th style="user-select:none;">
+                    Название проекта:
+                </th>
+                <th style="user-select:none;">
+                    Дата начала:
+                </th>
+                <th style="user-select:none;">
+                    Дата конца:
                 </th>
             </tr>
             @foreach (ProjectsModel pr in ViewBag.Projects)
             {
                 <tr>
-                    <td style="user-select:none; text-align:left; min-width:600px">
-                        <button class="btnLesh" type="submit" name="id" value="@pr.ID">Удалить</button>
-
+                    <td style="user-select:none; text-align:left; min-width:300px">
+                        <div class="d-inline-block">
+                            <button type="submit" name="id" value="@pr.ID">Удалить</button>
+                            <button asp-controller="Admin" asp-action="Risks" asp-route-projectId="@pr.ID">Настроить риски</button>
+                        </div>
+                    </td>
+                    <td style="user-select:none; text-align:left; min-width:400px">
                         @pr.Name
-                        <a class="nav-link text-dark" asp-controller="Admin" asp-action="Risks" asp-route-projectId="@pr.ID">Настроить</a>
+                    </td>
+                    <td style="user-select:none; text-align:left; min-width:150px">
+                        @pr.Start_Date.ToShortDateString()
+                    </td>
+                    <td style="user-select:none; text-align:left; min-width:150px">
+                        @pr.End_Date.ToShortDateString()
                     </td>
                 </tr>
             }

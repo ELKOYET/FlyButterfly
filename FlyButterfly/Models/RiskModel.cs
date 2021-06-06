@@ -11,9 +11,11 @@ namespace FlyButterfly.Models
         public string Name { get; set; }
         public string Discription { get; set; }
         public virtual UserModel User { get; set; }
-        public virtual RiskChanceModel Chance { get; set; }
-        public virtual RiskInfluenceModel Influence { get; set; }
+        public virtual ChanceModel Chance { get; set; }
+        public virtual InfluenceModel Influence { get; set; }
         public virtual ProjectsModel Project { get; set; }
-        public virtual RiskReaction Reaction { get; set; }
+        public virtual ReactionModel Reaction { get; set; }
+        public virtual RiskTypeModel Type { get; set; }
+
     }
 }

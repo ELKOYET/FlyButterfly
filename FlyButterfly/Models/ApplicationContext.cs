@@ -12,10 +12,11 @@ namespace FlyButterfly.Models
         public DbSet<RoleModel> Roles { get; set; }
         public DbSet<ProjectsModel> Projects { get; set; }
         public DbSet<ProfessionModel> Professions { get; set; }
-        public DbSet<RiskChanceModel> RiskChances { get; set; }
-        public DbSet<RiskInfluenceModel> RiskInfluences { get; set; }
-        public DbSet<RiskReaction> RiskReactions { get; set; }
+        public DbSet<ChanceModel> RiskChances { get; set; }
+        public DbSet<InfluenceModel> RiskInfluences { get; set; }
+        public DbSet<ReactionModel> RiskReactions { get; set; }
         public DbSet<RiskModel> RiskModels { get; set; }
+        public DbSet<RiskTypeModel> RiskTypes { get; set; }
 
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
@@ -45,22 +46,34 @@ namespace FlyButterfly.Models
             modelBuilder.Entity<UserModel>().HasData(new UserModel[] { adminUser });
 
 
-
-            modelBuilder.Entity<RiskChanceModel>().HasData(new RiskChanceModel[] {
-                new RiskChanceModel {ID=1, ChanceValue="a" },
-                new RiskChanceModel { ID = 2, ChanceValue = "b" },
+            modelBuilder.Entity<ChanceModel>().HasData(new ChanceModel[] {
+                new ChanceModel { ID = 1, Name="Низкая" },
+                new ChanceModel { ID = 2, Name = "Ниже среднего" },
+                new ChanceModel { ID = 3, Name = "Средняя" },
+                new ChanceModel { ID = 4, Name = "Выше среднего" },
+                new ChanceModel { ID = 5, Name = "Высокая" },
             });
 
-            modelBuilder.Entity<RiskInfluenceModel>().HasData(new RiskInfluenceModel[] {
-                new RiskInfluenceModel { ID = 1, InfluenceValue = "a" },
-                new RiskInfluenceModel { ID = 2, InfluenceValue = "b" },
+            modelBuilder.Entity<InfluenceModel>().HasData(new InfluenceModel[] {
+                new InfluenceModel { ID = 1, Name = "Низкое" },
+                new InfluenceModel { ID = 2, Name = "Ниже среднего" },
+                new InfluenceModel { ID = 3, Name = "Среднее" },
+                new InfluenceModel { ID = 4, Name = "Выше среднего" },
+                new InfluenceModel { ID = 5, Name = "Высокое" },
+
             });
-            modelBuilder.Entity<RiskReaction>().HasData(new RiskReaction[] {
-                new RiskReaction { ID = 1, ReactionName = "a" },
-                new RiskReaction { ID = 2, ReactionName = "b" },
+            modelBuilder.Entity<ReactionModel>().HasData(new ReactionModel[] {
+                new ReactionModel { ID = 1, Name = "Уклонение" },
+                new ReactionModel { ID = 2, Name = "Передача" },
+                new ReactionModel { ID = 3, Name = "Снижение" },
+                new ReactionModel { ID = 4, Name = "Принятие пассивное" },
+                new ReactionModel { ID = 5, Name = "Принятие активное" },
             });
 
-
+            modelBuilder.Entity<RiskTypeModel>().HasData(new RiskTypeModel[] {
+                new RiskTypeModel { ID = 1, Name = "Экономический" },
+                new RiskTypeModel { ID = 2, Name = "Политический" },
+            });
 
             // ------------------------------------------------------------------------
 

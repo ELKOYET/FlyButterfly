@@ -3,7 +3,7 @@
     ViewData["Title"] = "Риски проекта";
 }
 <div style="transform:translate(8%,0)">
-    <div class="leftcol" style="background:rgb(219 95 95); min-height:500px; margin-right:25px">
+    <div class="leftcol" style="background:rgb(219 95 95); margin-right:25px">
         <form asp-action="DeleteRisk" asp-controller="Admin" method="post">
             <div class="text-left">
                 <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
@@ -14,7 +14,7 @@
                     </tr>
                     @foreach (RiskModel pr in ViewBag.Risks)
                     {
-                        <tr class="RisksTableRow" onclick="Switch('editLabel'); Enable('EditPanel'); FillInputs('@(pr.ID)', '@(pr.Name)', '@(pr.Discription)', '@(pr.User.ID)', '@(pr.Reaction.ID)', '@(pr.Influence.ID)', '@(pr.Chance.ID)');">
+                        <tr class="RisksTableRow" onclick="Switch('editLabel'); Enable('EditPanel'); FillInputs('@(pr.ID)', '@(pr.Name)', '@(pr.Discription)', '@(pr.User.ID)', '@(pr.Reaction.ID)', '@(pr.Influence.ID)', '@(pr.Chance.ID)', '@(pr.Type.ID)');">
 
                             <td style="user-select:none;">
                                 <button type="submit" name="id" value="@pr.ID">Удалить</button>
@@ -36,7 +36,7 @@
     </div>
 
 
-    <div style="background: rgb(128 189 77); min-height:500px; margin-left:25px" class="rightcol">
+    <div style="background: rgb(128 189 77); margin-left:25px" class="rightcol">
 
         <div style="width:100%; display:table-cell; width:50%;">
             <div style="">
@@ -54,20 +54,35 @@
                     <textarea rows="4" style="min-height: 35px;  width:60%" asp-for="Discription" type="text" placeholder="Описание..."></textarea>
 
                     <div class="text-left">
-                        <p>Ответственный</p>
-                        @Html.DropDownList("UserId", ViewBag.Users as SelectList, "Ответственный")
+                        <label>
+                            Ответственный
+                            @Html.DropDownList("UserId", ViewBag.Users as SelectList, "Ответственный")
+                        </label>
 
-                        <p>Вероятность</p>
-                        @Html.DropDownList("ChanceId", ViewBag.Chances as SelectList, "Вероятность события")
+                        <label>
+                            Вероятность
+                            @Html.DropDownList("ChanceId", ViewBag.Chances as SelectList, "Вероятность события")
+                        </label>
+                        <label>
+                            Стратегия реагирования
+                            @Html.DropDownList("ReactionId", ViewBag.Reactions as SelectList, "Стратегия реагирования")
+                        </label>
 
-                        <p>Стратегия реагирования</p>
-                        @Html.DropDownList("ReactionId", ViewBag.Reactions as SelectList, "Стратегия реагирования")
+                        <label>
+                            Влияние на проект
+                            @Html.DropDownList("InfluenceId", ViewBag.Influences as SelectList, "Влияние на проект")
+                        </label>
 
-                        <p>Влияние на проект</p>
-                        @Html.DropDownList("InfluenceId", ViewBag.Influences as SelectList, "Влияние на проект")
+                        <label>
+                            Тип риска
+                            @Html.DropDownList("TypeId", ViewBag.Types as SelectList, "Тип риска")
+                        </label>
+
                     </div>
 
-                    <button type="submit" asp-route-edit="@false" asp-route-projectId="@ViewBag.projectId">Добавить риск к проекту</button>
+                    <div class="text-center">
+                        <button type="submit" asp-route-edit="@false" asp-route-projectId="@ViewBag.projectId">Добавить риск к проекту</button>
+                    </div>
                 </div>
             </form>
 
@@ -94,6 +109,9 @@
 
                             <p>Влияние на проект</p>
                             @Html.DropDownList("InfluenceId", ViewBag.Influences as SelectList, "Влияние на проект", new { @id = "EditInfluence" })
+
+                            <p>Тип риска</p>
+                            @Html.DropDownList("TypeId", ViewBag.Types as SelectList, "Тип риска", new { @id = "EditType" })
                         </div>
 
                         @Html.HiddenFor(x => x.ID, new { @id = "riskid" })
@@ -115,6 +133,7 @@
     let InfId = document.getElementById('EditInfluence');
     let ChanceId = document.getElementById('EditChance');
     let UsrId = document.getElementById('EditUser');
+    let TypeId = document.getElementById('EditType');
 
 
     let RiskId = document.getElementById('riskid');
@@ -124,7 +143,7 @@
     let editBtn = document.getElementById('editLabel');
     let addBtn = document.getElementById('addLabel');
 
-    function FillInputs(_riskid, _Name, _Dis, _UserId, _ReacId, _InfId, _ChanceId) {
+    function FillInputs(_riskid, _Name, _Dis, _UserId, _ReacId, _InfId, _ChanceId, _TypeId) {
         RiskId.value = _riskid;
 
         Name.value = _Name;
@@ -134,6 +153,7 @@
         ReacId.value = _ReacId;
         InfId.value = _InfId;
         ChanceId.value = _ChanceId;
+        TypeId.value = _TypeId;
     }
 
     function Enable(id) {

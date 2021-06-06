@@ -1,26 +1,23 @@
 ﻿@model UserModel
-<div>
-    Здравствуйте, @Model.Name !
-    Ваша роль @Model.Role.Name
-</div>
 
 <div>
     <h1>
         Мой профиль
     </h1>
-    <h2>
-        @Model.Login
-    </h2>
 </div>
     
+<ul class="MORDER">
+    <li>
+        Ваше имя -
+        @Model.Name
+    </li>
+    <li>
+        Ваша фамилия -
+        @Model.Surname
+    </li>
+    <li>
+        Ваша профессия -
+        @Model.Profession.Name
+    </li>
+</ul>
 
-<a>
-   
-    Ваше имя
-   @Model.Name
-    Ваша фамилия
-    @Model.Surname
-    Ваша профессия 
-     @Model.Profession.Name
-
-</a>

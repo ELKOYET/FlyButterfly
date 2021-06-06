@@ -1,0 +1,46 @@
+﻿@model RiskModel
+@{
+    ViewData["Title"] = "Риски проекта";
+}
+<div style="background:rgb(219 95 95);">
+    <form asp-action="Risks" asp-controller="User" method="get">
+        <div class="text-left">
+            <div class="text-left d-inline-block">
+
+                <input style="min-height: 35px; width:60%" name="name" type="text" placeholder="Название риска..." />
+
+                @Html.DropDownList("ChanceId", ViewBag.Chances as SelectList, "Вероятность события")
+
+                @Html.DropDownList("TypeId", ViewBag.Types as SelectList, "Тип риска")
+
+                <button name="projectId" value="@ViewBag.projectId" type="submit">Найти</button>
+
+            </div>
+            <div class="text-left d-inline-block">
+                <table class="table-responsive" style="height:400px; margin-top:25px; padding-bottom:25px">
+                    <tr>
+                        <th style="user-select:none;">Имя</th>
+                        <th style="user-select:none;">Ранг</th>
+                    </tr>
+                    @foreach (RiskModel pr in ViewBag.Risks)
+                    {
+                        <tr class="RisksTableRow">
+
+                            <td style="user-select:none; min-width:300px">
+                                @pr.Name
+                            </td>
+
+                            <td style="user-select:none; min-width:30px">
+                                @(pr.Influence.ID*pr.Chance.ID)
+                            </td>
+
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
